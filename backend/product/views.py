@@ -22,6 +22,9 @@ class ProductsView(generics.ListCreateAPIView):
             self.permission_classes = [IsAuthenticated, ]
         return super(ProductsView, self).get_permissions()
     
+    def get_queryset(self):
+        return Product.objects.filter(created_by=self.request.user)
+    
     def post(self, request):
         user = CustomUser.objects.get(id=request.user.id)
         category = Category.objects.get(name=request.data["category"])
