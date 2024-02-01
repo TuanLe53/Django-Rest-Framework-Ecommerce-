@@ -1,0 +1,24 @@
+body{
+    margin: 0;
+    display: flex;
+    justify-content: center;
+}
+
+#root{
+    height: 100vh;
+    width: 80vw;
+}
+
+#root #main-content{
+    height: 100vh;
+}
+
+.ant-carousel .slick-dots li button {
+    background: #ff4ef6;
+    opacity: 0.4;
+}
+
+.ant-carousel .slick-dots li.slick-active button {
+    opacity: 1;
+    background: #ff4ef6;
+}
