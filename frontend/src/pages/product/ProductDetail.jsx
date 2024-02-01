@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import {StarFilled} from "@ant-design/icons";
+import { StarFilled, ShoppingCartOutlined  } from "@ant-design/icons";
 import URL from "../../api/urls";
-import { Carousel, Flex, Image, Layout, Spin } from "antd";
+import { Button, Carousel, Flex, Image, InputNumber, Layout, Spin, notification } from "antd";
 import "./product_detail.css";
+import AuthContext from "../../contexts/AuthContext";
 
 const { Content, Sider } = Layout;
 
@@ -16,9 +17,60 @@ const infoContainerStyle = {
 
 function ProductDetail() {
     const { id } = useParams();
+    const { authToken } = useContext(AuthContext);
     const [product, setProduct] = useState(); 
     const [isLoading, setIsLoading] = useState(true);
-    console.log(product)
+
+    const [quantity, setQuantity] = useState(0);
+
+    const [api, contextHolder] = notification.useNotification();
+    const showNotification = () => {
+        api["success"]({
+            message: "Add to cart",
+            description: `Added ${quantity} ${product.name}${quantity !== 1 && "s"} to your cart.`,
+        });
+    };
+
+    const showAlertNotification = () => {
+        api["warning"]({
+            message: "Quantity error",
+            description: "Please check your quantity before adding it to the cart."
+        })
+    }
+
+    const showErrorNotification = () => {
+        api["error"]({
+            message: "Server error",
+            description: "Something go wrong. Please try again later"
+        })
+    }
+
+    const addToCart = async () => {
+        if (quantity === 0) {
+            return showAlertNotification();
+        }
+        let body = {
+            product: product.id,
+            quantity: quantity
+        };
+
+        let res = await fetch(URL.User + "cart/", {
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${String(authToken.access)}`,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(body)
+        })
+        // let data = await res.json()
+
+        if (res.status === 201) {
+            return showNotification();
+        } else {
+            return showErrorNotification();
+        }
+    }
+
     useEffect(() => {
         const fetchProduct = async () => {
             let res = await fetch(URL.Server + `product/${id}`)
@@ -38,6 +90,7 @@ function ProductDetail() {
             {isLoading ? <Spin />
                     :
                 <>
+                    {contextHolder}        
                     <Sider
                         style={imgContainerStyle}
                         width={"40%"}>
@@ -60,6 +113,10 @@ function ProductDetail() {
                             <p>In stock: {product.inventory.split(" ")[1]}</p>
                             <p>Price: {product.price} VND</p>
                             <p>Rate: {product.rating}<StarFilled /></p>
+                            <Flex>
+                                <InputNumber min={1} max={Number(product.inventory.split(" ")[1])} onChange={(value)=>setQuantity(value)}/>
+                                <Button onClick={addToCart} icon={<ShoppingCartOutlined />}>Add to Cart</Button>
+                            </Flex>
                     </Content>
                 </>
                     
