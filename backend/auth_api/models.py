@@ -33,4 +33,4 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     objects = CustomManager()
     
     def __str__(self):
-        return self.email
+        return self.username
