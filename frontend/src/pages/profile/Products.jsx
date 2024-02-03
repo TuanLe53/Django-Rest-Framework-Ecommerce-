@@ -105,7 +105,7 @@ function Products() {
                     </>
                     :
                     products.map((item) => (
-                    <ProductCard item={item} width={200} />
+                    <ProductCard item={item} width={200} key={item.id}/>
                 ))}
             </Flex>
 
