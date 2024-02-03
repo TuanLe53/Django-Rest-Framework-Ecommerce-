@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import Address, CartItem, PaymentMethod
+from product.serializers import ProductSerializer
 
 class AddressSerializer(serializers.ModelSerializer):
     
@@ -20,14 +21,13 @@ class AddCartItemSerializer(serializers.ModelSerializer):
         }
 
 class GetCartItemSerializer(serializers.ModelSerializer):
-    
+    product = ProductSerializer()
     class Meta:
         model = CartItem
         fields = "__all__"
         extra_kwargs = {
             "created_by": {"required": False}
         }
-        depth = 1
         
 class CreatePaymentSerializer(serializers.ModelSerializer):   
      
