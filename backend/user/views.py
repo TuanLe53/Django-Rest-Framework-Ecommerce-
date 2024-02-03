@@ -3,7 +3,7 @@ from rest_framework import generics, status
 from rest_framework.permissions import IsAuthenticated
 from auth_api.models import CustomUser
 from .models import Address, CartItem, PaymentMethod, PaymentType
-from .serializers import AddressSerializer, CartItemSerializer, CreatePaymentSerializer, GetPaymentSerializer
+from .serializers import AddressSerializer, AddCartItemSerializer, GetCartItemSerializer, CreatePaymentSerializer, GetPaymentSerializer
 from utils.permissions import IsOwner
 from datetime import datetime
 
@@ -35,8 +35,12 @@ class AddressView(generics.RetrieveUpdateDestroyAPIView):
     
 class CartView(generics.ListCreateAPIView):
     queryset = CartItem.objects.all()
-    serializer_class = CartItemSerializer
     permission_classes = [IsAuthenticated, ]
+    
+    def get_serializer_class(self):
+        if self.request.method == "GET":
+            return GetCartItemSerializer
+        return AddCartItemSerializer
     
     def get_queryset(self):
         user = self.request.user
@@ -44,7 +48,7 @@ class CartView(generics.ListCreateAPIView):
     
     def post(self, request):
         user = CustomUser.objects.get(id=request.user.id)
-        serializer = CartItemSerializer(data=request.data)
+        serializer = AddCartItemSerializer(data=request.data)
 
         if serializer.is_valid():
             serializer.save(created_by=user)
@@ -54,7 +58,7 @@ class CartView(generics.ListCreateAPIView):
         
 class CartItemView(generics.DestroyAPIView):
     queryset = CartItem.objects.all()
-    serializer_class = CartItemSerializer
+    serializer_class = AddCartItemSerializer
     permission_classes = [IsAuthenticated, IsOwner]
     
 class Payments(generics.ListCreateAPIView):
