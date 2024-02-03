@@ -11,13 +11,23 @@ class AddressSerializer(serializers.ModelSerializer):
             "created_by": {"required": False}
         }
         
-class CartItemSerializer(serializers.ModelSerializer):
+class AddCartItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = CartItem
         fields = "__all__"
         extra_kwargs = {
             "created_by": {"required": False}
         }
+
+class GetCartItemSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = CartItem
+        fields = "__all__"
+        extra_kwargs = {
+            "created_by": {"required": False}
+        }
+        depth = 1
         
 class CreatePaymentSerializer(serializers.ModelSerializer):   
      
