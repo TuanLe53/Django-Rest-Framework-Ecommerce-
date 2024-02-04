@@ -1,4 +1,6 @@
+__pycache__/
 env
 backend/.env
 backend/media/product/*
 backend/media/avatar/*
+.pytest_cache
