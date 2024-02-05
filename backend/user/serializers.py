@@ -9,7 +9,8 @@ class AddressSerializer(serializers.ModelSerializer):
         fields = "__all__"
         extra_kwargs = {
             "name": {"required": False},
-            "created_by": {"required": False}
+            "created_by": {"required": False},
+            "is_default": {"required": False}
         }
         
 class AddCartItemSerializer(serializers.ModelSerializer):

@@ -14,6 +14,7 @@ class Address(models.Model):
     city = models.CharField(max_length=255)
     address = models.CharField(max_length=1024)
     phone_number = models.CharField(validators=[phone_regex], max_length=17)
+    is_default = models.BooleanField(default=False)
     
 class CartItem(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique=True)
