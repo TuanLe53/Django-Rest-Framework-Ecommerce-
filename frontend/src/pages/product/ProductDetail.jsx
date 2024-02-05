@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
-import { StarFilled, ShoppingCartOutlined  } from "@ant-design/icons";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { StarFilled, ShoppingCartOutlined, ShoppingOutlined  } from "@ant-design/icons";
 import URL from "../../api/urls";
 import { Button, Carousel, Flex, Image, InputNumber, Layout, Spin, notification } from "antd";
 import "./product_detail.css";
@@ -62,12 +62,22 @@ function ProductDetail() {
             },
             body: JSON.stringify(body)
         })
-        // let data = await res.json()
-
+        
         if (res.status === 201) {
             return showNotification();
         } else {
             return showErrorNotification();
+        }
+    }
+
+    const navigate = useNavigate();
+    const handleBuy = () => {
+        if (quantity) {
+            let products = [{
+                "product_id": product.id,
+                "quantity": quantity
+            }];
+            navigate(`/create-order/`, {replace: true, state:{products}})
         }
     }
 
@@ -114,7 +124,8 @@ function ProductDetail() {
                             <p>Price: {product.price} VND</p>
                             <p>Rate: {product.rating}<StarFilled /></p>
                             <Flex>
-                                <InputNumber min={1} max={Number(product.inventory.split(" ")[1])} onChange={(value)=>setQuantity(value)}/>
+                                <InputNumber min={1} max={Number(product.inventory.split(" ")[1])} onChange={(value) => setQuantity(value)} />
+                                <Button onClick={handleBuy} type="primary" icon={<ShoppingOutlined />}>Buy</Button>
                                 <Button onClick={addToCart} icon={<ShoppingCartOutlined />}>Add to Cart</Button>
                             </Flex>
                     </Content>
