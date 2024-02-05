@@ -10,7 +10,9 @@ import PrivateRoute from "./utils/PrivateRoute";
 import Products from "./pages/profile/Products";
 import Cart from "./pages/profile/Cart";
 import Orders from "./pages/profile/Orders";
+import Payment from "./pages/profile/Payment";
 import ProductDetail from "./pages/product/ProductDetail";
+import Order from "./pages/order/Order";
 
 function App() {
 
@@ -25,7 +27,9 @@ function App() {
               <Route path="products" element={<Products />} />
               <Route path="cart" element={<Cart />} />
               <Route path="orders" element={<Orders />} />
+              <Route path="payment" element={<Payment />} />
             </Route>
+            <Route path="create-order/" element={<Order />} />
           
           </Route>
 
