@@ -2,10 +2,14 @@ import { Card, Flex } from "antd"
 import { useNavigate } from "react-router-dom";
 import { DeleteFilled } from "@ant-design/icons";
 
-function CartItemCard({item}) {
+function CartItemCard({item, deleteItem}) {
     const product = item.product;
 
     const navigate = useNavigate();
+
+    const handleDelete = () => {
+        deleteItem(item.id)
+    }
 
     return (
         <Card
@@ -38,7 +42,7 @@ function CartItemCard({item}) {
                     top: 10,
                     right: 20
                 }}
-                onClick={() => console.log("Delete item")}
+                onClick={handleDelete}
             />
         </Card>
     )
