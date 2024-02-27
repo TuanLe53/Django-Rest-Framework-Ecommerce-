@@ -71,6 +71,7 @@ function Cart() {
             </Flex>
             <Button
                 onClick={createOrder}
+                disabled={cartItems.length === 0 && true}
                 style={{ float: "right", marginTop: "15px" }}
                 icon={<ShoppingOutlined />}
             >
