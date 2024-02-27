@@ -13,7 +13,15 @@ function Cart() {
     const navigate = useNavigate();
 
     const deleteItem = async (itemID) => {
-        console.log("You shall not pass", itemID)
+        let res = await fetch(`${URL.User}cart-item/${itemID}/`, {
+            method: "DELETE",
+            headers: {"Authorization": `Bearer ${String(authToken.access)}`}
+        })
+        if (res.status === 204) {
+            setCartItems(cartItems => cartItems.filter((item) => item.id !== itemID))
+        } else {
+            alert("Something went wrong. Please try again later")
+        }
     };
 
     const createOrder = async () => {
