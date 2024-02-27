@@ -1,13 +1,32 @@
-import { ShoppingCartOutlined } from "@ant-design/icons";
-import { Flex } from "antd";
+import { ShoppingCartOutlined, ShoppingOutlined } from "@ant-design/icons";
+import { Flex, Button } from "antd";
 import { useContext, useEffect, useState } from "react";
 import URL from "../../api/urls";
-import ProductCard from "../../components/ProductCard";
 import AuthContext from "../../contexts/AuthContext";
+import CartItemCard from "../../components/CartItemCard";
+import { useNavigate } from "react-router-dom";
 
 function Cart() {
     const { authToken } = useContext(AuthContext);
     const [cartItems, setCartItems] = useState([]);
+
+    const navigate = useNavigate();
+
+    const deleteItem = async (itemID) => {
+        console.log("You shall not pass", itemID)
+    };
+
+    const createOrder = async () => {
+        const products = [];
+        cartItems.map((item) => {
+            products.push({
+                "product_id": item.product["id"],
+                "quantity": item.quantity
+            })
+        })
+        
+        navigate(`/create-order/`, {replace: true, state:{products}})
+    }
 
     useEffect(() => {
         const fetchCart = async () => {
@@ -38,10 +57,17 @@ function Cart() {
                 </div>
                     :
                     cartItems.map((item) => (
-                    <ProductCard item={item.product} width={200} key={item.id}/>
+                        <CartItemCard key={item.id} item={item} deleteItem={deleteItem} />
                 ))
             }
             </Flex>
+            <Button
+                onClick={createOrder}
+                style={{ float: "right", marginTop: "15px" }}
+                icon={<ShoppingOutlined />}
+            >
+                Create Order
+            </Button>
         </>
     )
 }
